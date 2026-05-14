@@ -1,0 +1,67 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="2685.4">
+  <style type="text/css">
+    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 13.0px 'Helvetica Neue'; color: #000000}
+    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 13.0px 'Helvetica Neue'; color: #000000; min-height: 15.0px}
+    p.p3 {margin: 0.0px 0.0px 0.0px 0.0px; font: 13.0px '.AppleSystemUIFontMonospaced'; color: #000000}
+    p.p4 {margin: 0.0px 0.0px 0.0px 0.0px; font: 13.0px 'Helvetica Neue'; min-height: 15.0px}
+    span.s1 {font: 13.0px 'Helvetica Neue'}
+    span.s2 {color: #1f6bc0}
+  </style>
+</head>
+<body>
+<p class="p1">else { nivel = 'Inflamație foarte ridicată'; desc = 'Scor ridicat care indică multiple sisteme implicate. Consultarea unui specialist este prioritară.'; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>document.getElementById('r-nivel-titlu').textContent = nivel;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>document.getElementById('r-nivel-desc').textContent = desc;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>const catDefs = [</p>
+<p class="p1"><span class="Apple-converted-space">    </span>{ key: 'inf', label: 'Inflamație sistemică', tips: ['Corp neinflamat', 'Ajustări recomandate', 'Intervenție necesară'] },</p>
+<p class="p1"><span class="Apple-converted-space">    </span>{ key: 'dig', label: 'Digestie &amp; microbiom', tips: ['Digestie bună', 'Câteva dezechilibre', 'Microbiom perturbat'] },</p>
+<p class="p1"><span class="Apple-converted-space">    </span>{ key: 'micro', label: 'Candidoză &amp; infecții', tips: ['Fără semne', 'Posibil dezechilibru', 'Prezență probabilă'] },</p>
+<p class="p1"><span class="Apple-converted-space">    </span>{ key: 'horm', label: 'Hormoni', tips: ['Echilibru bun', 'Posibil dezechilibru', 'Dezechilibru semnificativ'] },</p>
+<p class="p1"><span class="Apple-converted-space">    </span>{ key: 'med', label: 'Boli cronice', tips: ['Fără boli cronice', 'Câteva afecțiuni', 'Multiple afecțiuni'] },</p>
+<p class="p1"><span class="Apple-converted-space">  </span>];</p>
+<p class="p1"><span class="Apple-converted-space">  </span>let catHtml = '';</p>
+<p class="p1"><span class="Apple-converted-space">  </span>catDefs.forEach(({ key, label, tips }) =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const val = s[key], m = max[key];</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const pct = Math.round(val / m * 100);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const fillClass = pct &lt; 35 ? 'fill-low' : pct &lt; 65 ? 'fill-mid' : 'fill-high';</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const tipIdx = pct &lt; 35 ? 0 : pct &lt; 65 ? 1 : 2;</p>
+<p class="p3"><span class="s1"><span class="Apple-converted-space">    </span>catHtml +=</span> &lt;div class="cat-card"&gt;&lt;div class="cat-label"&gt;${label}&lt;/div&gt;&lt;div class="cat-bar-bg"&gt;&lt;div class="cat-fill ${fillClass}" style="width:${pct}%"&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class="cat-val"&gt;${val} / ${m}&lt;/div&gt;&lt;div class="cat-tip"&gt;${tips[tipIdx]}&lt;/div&gt;&lt;/div&gt;;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>});</p>
+<p class="p1"><span class="Apple-converted-space">  </span>document.getElementById('r-cat-grid').innerHTML = catHtml;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>const zone = [];</p>
+<p class="p1"><span class="Apple-converted-space">  </span>if (s.dig &gt;= 2) zone.push({ icon: '🫁', cls: s.dig &gt;= 4 ? 'r' : 'a', titlu: 'Permeabilitate intestinală', desc: 'Semnele de balonare și digestie lentă sugerează un intestin permeabil — factor direct în afecțiunile inflamatorii ale pielii.' });</p>
+<p class="p1"><span class="Apple-converted-space">  </span>if (ans['pofta-dulce']?.v === 'da' || ans['energie']?.v === 'da') zone.push({ icon: '🍬', cls: 'a', titlu: 'Disbioza și supracreștere de Candida', desc: 'Pofta de dulce și fluctuațiile de energie sunt semne clasice ale disbioze intestinale, cu impact direct pe acnee și rozacee.' });</p>
+<p class="p1"><span class="Apple-converted-space">  </span>if (s.horm &gt;= 2) zone.push({ icon: '⚖️', cls: s.horm &gt;= 4 ? 'r' : 'a', titlu: 'Dezechilibru hormonal', desc: 'Androgenele, insulina și cortizolul influențează direct secrețiile sebacee.' });</p>
+<p class="p1"><span class="Apple-converted-space">  </span>if (s.micro &gt;= 2) zone.push({ icon: '🦠', cls: 'a', titlu: 'Disbioza microbiomului', desc: 'Infecțiile recurente indică un microbiom perturbat. Refacerea florei intestinale este esențială.' });</p>
+<p class="p1"><span class="Apple-converted-space">  </span>if (ans['oboseala']?.v === 'da' || ans['ceata']?.v === 'da') zone.push({ icon: '🧠', cls: 'a', titlu: 'Stres oxidativ', desc: 'Oboseala cronică sugerează stres oxidativ ridicat și posibil deficit de micronutrienți.' });</p>
+<p class="p1"><span class="Apple-converted-space">  </span>if (s.inf &gt;= 5) zone.push({ icon: '🔥', cls: 'r', titlu: 'Inflamație sistemică cronică', desc: 'Multiple simptome inflamatorii concomitente alimentează afecțiunile cutanate.' });</p>
+<p class="p1"><span class="Apple-converted-space">  </span>if (zone.length === 0) zone.push({ icon: '✓', cls: 'g', titlu: 'Profil echilibrat', desc: 'Nu au fost identificate zone majore de risc.' });</p>
+<p class="p1"><span class="Apple-converted-space">  </span>document.getElementById('r-zone-list').innerHTML = <span class="s2">zone.map</span>(z =&gt; `&lt;div class="zone-item ${z.cls}"&gt;&lt;div class="zone-icon"&gt;${z.icon}&lt;/div&gt;&lt;div&gt;&lt;div class="zone-titlu"&gt;${z.titlu}&lt;/div&gt;&lt;div class="zone-desc"&gt;${z.desc}&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;`).join('');</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>const rec = [];</p>
+<p class="p1"><span class="Apple-converted-space">  </span>if (s.dig &gt;= 2 || ans['balon-carbo']?.v === 'da') rec.push('Elimină temporar glutenul și lactatele (4–6 săptămâni) pentru a evalua impactul lor.');</p>
+<p class="p1"><span class="Apple-converted-space">  </span>if (ans['pofta-dulce']?.v === 'da') rec.push('Reduceți zahărul rafinat. Înlocuiți cu legume, proteine de calitate și grăsimi sănătoase.');</p>
+<p class="p1"><span class="Apple-converted-space">  </span>if (s.micro &gt;= 2) rec.push('Introduceți probiotice și alimente fermentate pentru refacerea microbiomului.');</p>
+<p class="p1"><span class="Apple-converted-space">  </span>if (s.horm &gt;= 2) rec.push('Susțineți echilibrul hormonal prin somn suficient (7–8h) și creșterea consumului de zinc.');</p>
+<p class="p1"><span class="Apple-converted-space">  </span>rec.push('Hidratare optimă: minim 2L de apă/zi, preferabil filtrată sau în sticlă de sticlă.');</p>
+<p class="p1"><span class="Apple-converted-space">  </span>if (getRadioVal('sport') === 'Deloc' || getRadioVal('sport') === 'Ocazional') rec.push('Introduceți mișcare regulată — 30 min, 3× pe săptămână.');</p>
+<p class="p1"><span class="Apple-converted-space">  </span>rec.</p>
+<p class="p4"><br></p>
+<p class="p4"><br></p>
+<p class="p1">push('Jurnal alimentar 2 săptămâni: notați ce mâncați și starea pielii a doua zi.');</p>
+<p class="p1"><span class="Apple-converted-space">  </span>document.getElementById('r-rec-list').innerHTML = <span class="s2">rec.map</span>((r, i) =&gt; `&lt;div class="rec-item"&gt;&lt;div class="rec-num"&gt;${i+1}&lt;/div&gt;&lt;div class="rec-text"&gt;${r}&lt;/div&gt;&lt;/div&gt;`).join('');</p>
+<p class="p1">}</p>
+<p class="p1">&lt;/script&gt;</p>
+<p class="p1">&lt;/body&gt;</p>
+<p class="p1">&lt;/html&gt;</p>
+</body>
+</html>
