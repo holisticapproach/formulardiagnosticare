@@ -1,0 +1,138 @@
+<div class="step"><div class="step-n">2</div><span>Specialiștii noștri analizează toate informațiile în detaliu.</span></div>
+      <div class="step"><div class="step-n">3</div><span>Primești <strong>raportul de diagnosticare</strong> în 3–5 zile lucrătoare.</span></div>
+    </div>
+    <a class="contact-link" href="mailto:contact@clearskinlab.ro">Contactează-ne</a>
+  </div>
+</div>
+
+<div class="site-footer">
+  <strong>🌿 ClearSkin Lab</strong>
+  Evaluare nutrițională funcțională pentru piele sănătoasă
+</div>
+
+<script>
+const ans = {};
+
+const KG_VALS = ['kg-plus','acnee-kg','rozacee-kg','toate'];
+document.querySelectorAll('input[name="tip"]').forEach(radio => {
+  radio.addEventListener('change', () => {
+    const sec = document.getElementById('kg-section');
+    if (KG_VALS.includes(radio.value)) {
+      sec.style.display = 'block';
+      sec.style.animation = 'fadeSlide 0.35s ease';
+    } else {
+      sec.style.display = 'none';
+    }
+  });
+});
+
+document.querySelectorAll('.psych-trigger').forEach(group => {
+  const targetId = group.dataset.target;
+  const detail = document.getElementById(targetId);
+  if (!detail) return;
+  group.querySelectorAll('.frb').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const val = btn.querySelector('input').value;
+      if (val === 'nu') {
+        detail.style.display = 'none';
+        detail.classList.remove('open');
+      } else {
+        detail.style.display = 'block';
+        setTimeout(() => detail.classList.add('open'), 10);
+      }
+    });
+  });
+});
+
+document.querySelectorAll('#form-view .frb').forEach(b => {
+  b.addEventListener('click', () => {
+    const n = b.querySelector('input').name;
+    document.querySelectorAll(`input[name="${n}"]`).forEach(i => i.closest('.frb').classList.remove('on'));
+    b.classList.add('on');
+    updateProgress();
+  });
+});
+
+document.querySelectorAll('#form-view .fcb').forEach(b => {
+  b.addEventListener('click', () => { b.classList.toggle('on'); updateProgress(); });
+});
+
+document.querySelectorAll('#form-view .yb').forEach(btn => {
+  btn.addEventListener('click', (e) => {
+    e.preventDefault(); e.stopPropagation(); e.stopImmediatePropagation();
+    const q = btn.dataset.q, v = btn.dataset.v, cat = btn.dataset.cat;
+    btn.closest('.yb-wrap').querySelectorAll('.yb').forEach(b => b.classList.remove('ya','na'));
+    btn.classList.add((v === 'nu' || v === 'na') ? 'na' : 'ya');
+    ans[q] = { v, cat };
+    updateProgress();
+  });
+});
+
+function updateProgress() {
+  const total = 42;
+  const answered = Object.keys(ans).length + document.querySelectorAll('.frb.on').length / 2;
+  const pct = Math.min(100, Math.round(answered / total * 100));
+  document.getElementById('pbar').style.width = pct + '%';
+}
+
+function getScores() {
+  const s = { inf: 0, dig: 0, micro: 0, horm: 0, med: 0 };
+  const max = { inf: 14, dig: 5, micro: 5, horm: 5, med: 8 };
+  Object.values(ans).forEach(({ v, cat }) => {
+    if (v === 'da' && s[cat] !== undefined) s[cat]++;
+  });
+  return { s, max };
+}
+
+function getRadioVal(name) {
+  const checked = document.querySelector(`input[name="${name}"]:checked`);
+  return checked ? checked.value : '';
+}
+
+else { nivel = 'Inflamație foarte ridicată'; desc = 'Scor ridicat care indică multiple sisteme implicate. Consultarea unui specialist este prioritară.'; }
+  document.getElementById('r-nivel-titlu').textContent = nivel;
+  document.getElementById('r-nivel-desc').textContent = desc;
+
+  const catDefs = [
+    { key: 'inf', label: 'Inflamație sistemică', tips: ['Corp neinflamat', 'Ajustări recomandate', 'Intervenție necesară'] },
+    { key: 'dig', label: 'Digestie & microbiom', tips: ['Digestie bună', 'Câteva dezechilibre', 'Microbiom perturbat'] },
+    { key: 'micro', label: 'Candidoză & infecții', tips: ['Fără semne', 'Posibil dezechilibru', 'Prezență probabilă'] },
+    { key: 'horm', label: 'Hormoni', tips: ['Echilibru bun', 'Posibil dezechilibru', 'Dezechilibru semnificativ'] },
+    { key: 'med', label: 'Boli cronice', tips: ['Fără boli cronice', 'Câteva afecțiuni', 'Multiple afecțiuni'] },
+  ];
+  let catHtml = '';
+  catDefs.forEach(({ key, label, tips }) => {
+    const val = s[key], m = max[key];
+    const pct = Math.round(val / m * 100);
+    const fillClass = pct < 35 ? 'fill-low' : pct < 65 ? 'fill-mid' : 'fill-high';
+    const tipIdx = pct < 35 ? 0 : pct < 65 ? 1 : 2;
+    catHtml += <div class="cat-card"><div class="cat-label">${label}</div><div class="cat-bar-bg"><div class="cat-fill ${fillClass}" style="width:${pct}%"></div></div><div class="cat-val">${val} / ${m}</div><div class="cat-tip">${tips[tipIdx]}</div></div>;
+  });
+  document.getElementById('r-cat-grid').innerHTML = catHtml;
+
+  const zone = [];
+  if (s.dig >= 2) zone.push({ icon: '🫁', cls: s.dig >= 4 ? 'r' : 'a', titlu: 'Permeabilitate intestinală', desc: 'Semnele de balonare și digestie lentă sugerează un intestin permeabil — factor direct în afecțiunile inflamatorii ale pielii.' });
+  if (ans['pofta-dulce']?.v === 'da' || ans['energie']?.v === 'da') zone.push({ icon: '🍬', cls: 'a', titlu: 'Disbioza și supracreștere de Candida', desc: 'Pofta de dulce și fluctuațiile de energie sunt semne clasice ale disbioze intestinale, cu impact direct pe acnee și rozacee.' });
+  if (s.horm >= 2) zone.push({ icon: '⚖️', cls: s.horm >= 4 ? 'r' : 'a', titlu: 'Dezechilibru hormonal', desc: 'Androgenele, insulina și cortizolul influențează direct secrețiile sebacee.' });
+  if (s.micro >= 2) zone.push({ icon: '🦠', cls: 'a', titlu: 'Disbioza microbiomului', desc: 'Infecțiile recurente indică un microbiom perturbat. Refacerea florei intestinale este esențială.' });
+  if (ans['oboseala']?.v === 'da' || ans['ceata']?.v === 'da') zone.push({ icon: '🧠', cls: 'a', titlu: 'Stres oxidativ', desc: 'Oboseala cronică sugerează stres oxidativ ridicat și posibil deficit de micronutrienți.' });
+  if (s.inf >= 5) zone.push({ icon: '🔥', cls: 'r', titlu: 'Inflamație sistemică cronică', desc: 'Multiple simptome inflamatorii concomitente alimentează afecțiunile cutanate.' });
+  if (zone.length === 0) zone.push({ icon: '✓', cls: 'g', titlu: 'Profil echilibrat', desc: 'Nu au fost identificate zone majore de risc.' });
+  document.getElementById('r-zone-list').innerHTML = zone.map(z => `<div class="zone-item ${z.cls}"><div class="zone-icon">${z.icon}</div><div><div class="zone-titlu">${z.titlu}</div><div class="zone-desc">${z.desc}</div></div></div>`).join('');
+
+  const rec = [];
+  if (s.dig >= 2 || ans['balon-carbo']?.v === 'da') rec.push('Elimină temporar glutenul și lactatele (4–6 săptămâni) pentru a evalua impactul lor.');
+  if (ans['pofta-dulce']?.v === 'da') rec.push('Reduceți zahărul rafinat. Înlocuiți cu legume, proteine de calitate și grăsimi sănătoase.');
+  if (s.micro >= 2) rec.push('Introduceți probiotice și alimente fermentate pentru refacerea microbiomului.');
+  if (s.horm >= 2) rec.push('Susțineți echilibrul hormonal prin somn suficient (7–8h) și creșterea consumului de zinc.');
+  rec.push('Hidratare optimă: minim 2L de apă/zi, preferabil filtrată sau în sticlă de sticlă.');
+  if (getRadioVal('sport') === 'Deloc' || getRadioVal('sport') === 'Ocazional') rec.push('Introduceți mișcare regulată — 30 min, 3× pe săptămână.');
+  rec.
+
+
+push('Jurnal alimentar 2 săptămâni: notați ce mâncați și starea pielii a doua zi.');
+  document.getElementById('r-rec-list').innerHTML = rec.map((r, i) => `<div class="rec-item"><div class="rec-num">${i+1}</div><div class="rec-text">${r}</div></div>`).join('');
+}
+</script>
+</body>
+</html>
