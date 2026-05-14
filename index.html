@@ -1,0 +1,1508 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Evaluare Acnee & Rozacee — Formular Nutrițional</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #faf7f2;
+    --warm: #f0e8dc;
+    --sage: #8a9e8c;
+    --clay: #c4705a;
+    --espresso: #2c1f1a;
+    --mist: #d6cfc6;
+    --gold: #b89b6a;
+    --yes-green: #4a7c5f;
+    --no-red: #b05050;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--cream);
+    color: var(--espresso);
+    font-size: 15px;
+    line-height: 1.6;
+  }
+
+  /* HEADER */
+  .top-bar {
+    background: var(--espresso);
+    color: var(--cream);
+    text-align: center;
+    padding: 10px 20px 8px;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-weight: 300;
+  }
+  .hero {
+    background: linear-gradient(135deg, var(--espresso) 0%, #4a2f28 100%);
+    color: var(--cream);
+    text-align: center;
+    padding: 48px 24px 40px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse at 70% 30%, rgba(180,140,100,0.15) 0%, transparent 60%);
+  }
+  .hero-label {
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 16px;
+  }
+  .hero h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(36px, 7vw, 56px);
+    font-weight: 300;
+    line-height: 1.1;
+    margin-bottom: 16px;
+  }
+  .hero h1 em { color: var(--gold); font-style: italic; }
+  .hero p {
+    color: rgba(250,247,242,0.7);
+    font-size: 14px;
+    max-width: 420px;
+    margin: 0 auto;
+  }
+
+  /* PROGRESS */
+  .progress-wrap {
+    background: var(--warm);
+    padding: 12px 24px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    border-bottom: 1px solid var(--mist);
+  }
+  .pbar-bg {
+    background: var(--mist);
+    height: 3px;
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  #pbar {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, var(--sage), var(--gold));
+    transition: width 0.4s ease;
+    border-radius: 2px;
+  }
+
+  /* FORM WRAPPER */
+  #form-view { max-width: 700px; margin: 0 auto; padding: 32px 20px 60px; }
+
+  /* SECTION */
+  .section {
+    background: #fff;
+    border-radius: 12px;
+    border: 1px solid var(--mist);
+    margin-bottom: 24px;
+    overflow: hidden;
+  }
+  .section-head {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 20px 24px;
+    background: var(--warm);
+    border-bottom: 1px solid var(--mist);
+  }
+  .section-num {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    background: var(--espresso);
+    color: var(--cream);
+    font-size: 12px;
+    font-weight: 500;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .section-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--espresso);
+  }
+  .section-sub {
+    font-size: 12px;
+    color: var(--sage);
+    margin-top: 2px;
+  }
+  .section-body { padding: 24px; }
+
+  /* FIELD */
+  .field { margin-bottom: 22px; }
+  .field:last-child { margin-bottom: 0; }
+  label.lbl {
+    display: block;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--espresso);
+    margin-bottom: 8px;
+  }
+  input[type=text], input[type=number], input[type=email], textarea, select {
+    width: 100%;
+    border: 1.5px solid var(--mist);
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    color: var(--espresso);
+    background: var(--cream);
+    transition: border-color 0.2s;
+    outline: none;
+  }
+  input:focus, textarea:focus, select:focus { border-color: var(--gold); }
+  textarea { resize: vertical; min-height: 80px; }
+
+  /* SLIDER */
+  .slider-wrap { position: relative; }
+  input[type=range] {
+    width: 100%; accent-color: var(--espresso);
+    height: 4px; cursor: pointer;
+    border: none; background: transparent; padding: 0;
+  }
+  .slider-labels {
+    display: flex; justify-content: space-between;
+    font-size: 11px; color: var(--sage); margin-top: 4px;
+  }
+  #f-stres-val {
+    display: inline-block;
+    font-weight: 600;
+    color: var(--espresso);
+    background: var(--warm);
+    padding: 2px 10px;
+    border-radius: 20px;
+    font-size: 13px;
+    margin-bottom: 6px;
+  }
+
+  /* RADIO BUTTONS (frb) */
+  .radio-group { display: flex; flex-wrap: wrap; gap: 8px; }
+  .frb {
+    display: flex; align-items: center; gap: 8px;
+    padding: 8px 16px;
+    border: 1.5px solid var(--mist);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 13px;
+    background: #fff;
+  }
+  .frb input[type=radio] { display: none; }
+  .frb:hover { border-color: var(--gold); background: var(--warm); }
+  .frb.on { border-color: var(--espresso); background: var(--espresso); color: var(--cream); }
+
+  /* CHECKBOXES (fcb) */
+  .check-group { display: flex; flex-wrap: wrap; gap: 8px; }
+  .fcb {
+    padding: 7px 14px;
+    border: 1.5px solid var(--mist);
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 13px;
+    background: #fff;
+  }
+  .fcb:hover { border-color: var(--gold); }
+  .fcb.on { border-color: var(--sage); background: var(--sage); color: #fff; }
+  .fcb input { display: none; }
+
+  /* YES/NO */
+  .yb-wrap { display: flex; gap: 8px; }
+  .yn-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--warm);
+    gap: 12px;
+  }
+  .yn-row:last-child { border-bottom: none; padding-bottom: 0; }
+  .yn-label { font-size: 13px; flex: 1; }
+  .yb {
+    padding: 6px 18px;
+    border-radius: 6px;
+    border: 1.5px solid var(--mist);
+    background: #fff;
+    cursor: pointer;
+    font-size: 13px;
+    font-family: 'DM Sans', sans-serif;
+    transition: all 0.2s;
+  }
+  .yb:hover { border-color: var(--gold); }
+  .yb.ya { background: var(--yes-green); border-color: var(--yes-green); color: #fff; }
+  .yb.na { background: var(--mist); border-color: var(--mist); color: var(--espresso); }
+
+  /* NEW QUESTION HIGHLIGHT */
+  .field-new {
+    border-left: 3px solid var(--gold);
+    padding-left: 16px;
+    background: linear-gradient(to right, rgba(184,155,106,0.06), transparent);
+    border-radius: 0 8px 8px 0;
+    padding-top: 12px;
+    padding-bottom: 12px;
+    margin-bottom: 22px;
+  }
+  .field-new label.lbl::after {
+    content: ' ✦ Nou';
+    font-size: 10px;
+    letter-spacing: 1px;
+    color: var(--gold);
+    font-weight: 500;
+    text-transform: uppercase;
+    margin-left: 8px;
+  }
+
+  /* NOTE BOX */
+  .note-box {
+    background: var(--warm);
+    border-radius: 8px;
+    padding: 12px 16px;
+    font-size: 12px;
+    color: var(--sage);
+    margin-bottom: 18px;
+    border-left: 3px solid var(--sage);
+  }
+
+  /* SUBMIT */
+  .submit-area { text-align: center; margin-top: 32px; }
+  .submit-btn {
+    background: var(--espresso);
+    color: var(--cream);
+    border: none;
+    padding: 16px 48px;
+    border-radius: 40px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    letter-spacing: 0.5px;
+    transition: all 0.3s;
+  }
+  .submit-btn:hover { background: var(--clay); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(44,31,26,0.2); }
+  .submit-note { font-size: 12px; color: var(--sage); margin-top: 12px; }
+
+  /* REPORT */
+  #raport { display: none; max-width: 700px; margin: 0 auto; padding: 32px 20px 60px; }
+  .raport-hero {
+    background: var(--espresso);
+    color: var(--cream);
+    border-radius: 16px;
+    padding: 40px 32px;
+    text-align: center;
+    margin-bottom: 24px;
+  }
+  .raport-hero h2 { font-family: 'Cormorant Garamond', serif; font-size: 32px; font-weight: 300; margin-bottom: 8px; }
+  .scor-num { font-family: 'Cormorant Garamond', serif; font-size: 72px; font-weight: 300; color: var(--gold); line-height: 1; }
+  .scor-label { font-size: 12px; letter-spacing: 2px; text-transform: uppercase; color: rgba(250,247,242,0.6); margin-top: 4px; }
+  .nivel-titlu { font-size: 18px; font-weight: 500; margin-top: 20px; color: var(--gold); }
+  .nivel-desc { font-size: 13px; color: rgba(250,247,242,0.75); margin-top: 8px; max-width: 480px; margin-left: auto; margin-right: auto; }
+
+  .cat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 24px; }
+  @media(max-width:500px) { .cat-grid { grid-template-columns: 1fr; } }
+  .cat-card { background: #fff; border: 1px solid var(--mist); border-radius: 10px; padding: 16px; }
+  .cat-label { font-size: 12px; font-weight: 500; color: var(--espresso); margin-bottom: 8px; }
+  .cat-bar-bg { background: var(--warm); height: 6px; border-radius: 3px; overflow: hidden; }
+  .cat-fill { height: 100%; border-radius: 3px; transition: width 1s ease; }
+  .fill-low { background: var(--sage); }
+  .fill-mid { background: var(--gold); }
+  .fill-high { background: var(--clay); }
+  .cat-val { font-size: 11px; color: var(--sage); margin-top: 4px; }
+  .cat-tip { font-size: 11px; color: var(--espresso); margin-top: 4px; font-style: italic; }
+
+  .zone-list { margin-bottom: 24px; }
+  .zone-item {
+    background: #fff;
+    border: 1px solid var(--mist);
+    border-radius: 10px;
+    padding: 16px 20px;
+    display: flex;
+    gap: 14px;
+    margin-bottom: 10px;
+    align-items: flex-start;
+  }
+  .zone-icon { font-size: 24px; flex-shrink: 0; margin-top: 2px; }
+  .zone-titlu { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
+  .zone-desc { font-size: 12px; color: #666; line-height: 1.5; }
+  .zone-item.r { border-left: 3px solid var(--clay); }
+  .zone-item.a { border-left: 3px solid var(--gold); }
+  .zone-item.g { border-left: 3px solid var(--sage); }
+
+  .rec-list { margin-bottom: 24px; }
+  .rec-item {
+    background: #fff;
+    border: 1px solid var(--mist);
+    border-radius: 10px;
+    padding: 14px 18px;
+    margin-bottom: 8px;
+    font-size: 13px;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  .rec-num {
+    width: 24px; height: 24px;
+    background: var(--espresso);
+    color: var(--cream);
+    border-radius: 50%;
+    font-size: 11px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .rec-text strong { color: var(--espresso); }
+
+  .raport-footer {
+    text-align: center;
+    padding: 32px;
+    background: var(--warm);
+    border-radius: 12px;
+    border: 1px solid var(--mist);
+  }
+  .raport-footer h3 { font-family: 'Cormorant Garamond', serif; font-size: 24px; font-weight: 400; margin-bottom: 16px; }
+  .steps { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
+  .step { display: flex; gap: 12px; align-items: flex-start; text-align: left; font-size: 13px; }
+  .step-n {
+    width: 24px; height: 24px;
+    background: var(--espresso); color: var(--cream);
+    border-radius: 50%; font-size: 11px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .contact-link {
+    display: inline-block;
+    background: var(--espresso);
+    color: var(--cream);
+    padding: 12px 32px;
+    border-radius: 30px;
+    text-decoration: none;
+    font-size: 14px;
+    margin-top: 16px;
+    transition: background 0.2s;
+  }
+  .contact-link:hover { background: var(--clay); }
+
+  /* FOOTER */
+  .site-footer {
+    text-align: center;
+    padding: 32px 20px;
+    font-size: 12px;
+    color: var(--sage);
+    border-top: 1px solid var(--mist);
+  }
+  .site-footer strong { display: block; font-family: 'Cormorant Garamond', serif; font-size: 18px; color: var(--espresso); margin-bottom: 4px; }
+
+  @keyframes fadeSlide {
+    from { opacity: 0; transform: translateY(-8px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* PSYCH FIELDS */
+  .psych-field { margin-bottom: 24px; }
+  .psych-detail {
+    overflow: hidden;
+    transition: max-height 0.4s ease, opacity 0.3s ease;
+    max-height: 0;
+    opacity: 0;
+  }
+  .psych-detail.open {
+    max-height: 300px;
+    opacity: 1;
+  }
+
+  @media(max-width:600px) {
+    .section-body { padding: 16px; }
+    .yn-row { flex-wrap: wrap; }
+  }
+</style>
+</head>
+<body>
+
+<div class="top-bar">ClearSkin Lab — Evaluare Nutrițională Funcțională</div>
+
+<div class="hero">
+  <div class="hero-label">Formular de evaluare</div>
+  <h1>Acnee & <em>Rozacee</em></h1>
+  <p>Completați acest formular detaliat pentru a primi o evaluare personalizată a stării corpului dumneavoastră.</p>
+</div>
+
+<div class="progress-wrap">
+  <div class="pbar-bg"><div id="pbar"></div></div>
+</div>
+
+<div id="form-view">
+
+  <!-- 1. DATE GENERALE -->
+  <div class="section">
+    <div class="section-head">
+      <div class="section-num">1</div>
+      <div>
+        <div class="section-title">Date generale</div>
+        <div class="section-sub">Informații de bază despre dumneavoastră</div>
+      </div>
+    </div>
+    <div class="section-body">
+      <div class="field">
+        <label class="lbl">Nume și prenume</label>
+        <input type="text" id="f-nume" placeholder="Numele dumneavoastră">
+      </div>
+      <div class="field">
+        <label class="lbl">Vârstă</label>
+        <input type="number" id="f-varsta" placeholder="Ani" min="10" max="99">
+      </div>
+      <div class="field">
+        <label class="lbl">Sex</label>
+        <div class="radio-group">
+          <label class="frb"><input type="radio" name="sex" value="feminin"><span>Feminin</span></label>
+          <label class="frb"><input type="radio" name="sex" value="masculin"><span>Masculin</span></label>
+          <label class="frb"><input type="radio" name="sex" value="altul"><span>Altul</span></label>
+        </div>
+      </div>
+      <div class="field">
+        <label class="lbl">Ocupație</label>
+        <input type="text" id="f-occ" placeholder="Ex: birou, în aer liber, student...">
+      </div>
+      <div class="field">
+        <label class="lbl">Nivel stres general <span id="f-stres-val">5</span></label>
+        <input type="range" id="f-stres" min="1" max="10" value="5" oninput="document.getElementById('f-stres-val').textContent=this.value">
+        <div class="slider-labels"><span>Relaxat</span><span>Stres extrem</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. ISTORICUL PIELII -->
+  <div class="section">
+    <div class="section-head">
+      <div class="section-num">2</div>
+      <div>
+        <div class="section-title">Istoricul problemei pielii</div>
+        <div class="section-sub">Evoluția și caracteristicile afecțiunii</div>
+      </div>
+    </div>
+    <div class="section-body">
+      <div class="field">
+        <label class="lbl">Tip problemă</label>
+        <div class="radio-group" id="tip-problema-group">
+          <label class="frb"><input type="radio" name="tip" value="acnee"><span>Acnee</span></label>
+          <label class="frb"><input type="radio" name="tip" value="rozacee"><span>Rozacee</span></label>
+          <label class="frb"><input type="radio" name="tip" value="ambele"><span>Ambele</span></label>
+          <label class="frb"><input type="radio" name="tip" value="kg-plus"><span>⚖️ Kg în plus</span></label>
+          <label class="frb"><input type="radio" name="tip" value="acnee-kg"><span>Acnee + Kg în plus</span></label>
+          <label class="frb"><input type="radio" name="tip" value="rozacee-kg"><span>Rozacee + Kg în plus</span></label>
+          <label class="frb"><input type="radio" name="tip" value="toate"><span>Toate cele de mai sus</span></label>
+        </div>
+      </div>
+
+      <!-- Secțiunea Kg — apare condiționat -->
+      <div id="kg-section" style="display:none; margin-top:4px;">
+        <div style="background:linear-gradient(135deg,rgba(196,112,90,0.07),rgba(184,155,106,0.07)); border:1px solid rgba(196,112,90,0.2); border-radius:10px; padding:20px;">
+          <div style="font-size:11px; letter-spacing:2px; text-transform:uppercase; color:var(--clay); margin-bottom:12px; font-weight:500;">⚖️ Greutate corporală</div>
+
+          <div class="field">
+            <label class="lbl">Greutatea actuală</label>
+            <div style="display:flex; align-items:center; gap:10px;">
+              <input type="number" id="f-kg-actual" placeholder="Ex: 78" min="30" max="250" style="max-width:140px;">
+              <span style="font-size:14px; color:var(--sage);">kg</span>
+            </div>
+          </div>
+
+          <div class="field">
+            <label class="lbl">Înălțimea</label>
+            <div style="display:flex; align-items:center; gap:10px;">
+              <input type="number" id="f-inaltime" placeholder="Ex: 165" min="100" max="220" style="max-width:140px;">
+              <span style="font-size:14px; color:var(--sage);">cm</span>
+            </div>
+          </div>
+
+          <div class="field">
+            <label class="lbl">Greutatea la care îți dorești să ajungi</label>
+            <div style="display:flex; align-items:center; gap:10px;">
+              <input type="number" id="f-kg-tinta" placeholder="Ex: 65" min="30" max="250" style="max-width:140px;">
+              <span style="font-size:14px; color:var(--sage);">kg</span>
+            </div>
+          </div>
+
+          <div class="field">
+            <label class="lbl">De cât timp te confrunți cu greutatea în plus?</label>
+            <div class="radio-group">
+              <label class="frb"><input type="radio" name="kg-durata" value="sub1an"><span>Sub 1 an</span></label>
+              <label class="frb"><input type="radio" name="kg-durata" value="1-3ani"><span>1–3 ani</span></label>
+              <label class="frb"><input type="radio" name="kg-durata" value="3-10ani"><span>3–10 ani</span></label>
+              <label class="frb"><input type="radio" name="kg-durata" value="toata-viata"><span>Toată viața</span></label>
+            </div>
+          </div>
+
+          <div class="field">
+            <label class="lbl">Greutatea a crescut progresiv sau brusc?</label>
+            <div class="radio-group">
+              <label class="frb"><input type="radio" name="kg-debut" value="progresiv"><span>Progresiv, în timp</span></label>
+              <label class="frb"><input type="radio" name="kg-debut" value="brusc"><span>Brusc (după un eveniment)</span></label>
+              <label class="frb"><input type="radio" name="kg-debut" value="fluctuant"><span>Fluctuant — slăbesc și mă îngraș</span></label>
+            </div>
+          </div>
+
+          <div class="field" style="margin-bottom:0;">
+            <label class="lbl">Ai mai ținut diete sau programe de slăbit?</label>
+            <div class="radio-group" style="margin-bottom:10px;">
+              <label class="frb"><input type="radio" name="kg-diete" value="nu"><span>Nu</span></label>
+              <label class="frb"><input type="radio" name="kg-diete" value="cateva"><span>Câteva</span></label>
+              <label class="frb"><input type="radio" name="kg-diete" value="multe"><span>Multe, fără rezultat durabil</span></label>
+            </div>
+            <textarea id="f-kg-diete-det" rows="2" placeholder="Dacă da, ce ai încercat și cum a mers? (ceto, post intermitent, număratul caloriilor etc.)"></textarea>
+          </div>
+
+        </div>
+      </div>
+      <div class="field">
+        <label class="lbl">De când au apărut simptomele afecțiunii pielii?</label><span style="display:block; font-size:12px; color:var(--sage); margin-top:-4px; margin-bottom:8px;">(acnee, rozacee sau altă problemă cutanată)</span>
+        <input type="text" id="f-decand" placeholder="Ex: 2 ani, din adolescență...">
+      </div>
+      <div class="field">
+        <label class="lbl">Debut</label>
+        <div class="radio-group">
+          <label class="frb"><input type="radio" name="debut" value="brusc"><span>Brusc</span></label>
+          <label class="frb"><input type="radio" name="debut" value="treptat"><span>Treptat</span></label>
+        </div>
+      </div>
+      <div class="field">
+        <label class="lbl">Evoluție în timp</label>
+        <div class="radio-group">
+          <label class="frb"><input type="radio" name="agrav" value="agravat"><span>S-au agravat</span></label>
+          <label class="frb"><input type="radio" name="agrav" value="stabil"><span>Au rămas la fel</span></label>
+          <label class="frb"><input type="radio" name="agrav" value="ameliorat"><span>S-au ameliorat</span></label>
+        </div>
+      </div>
+      <div class="field">
+        <label class="lbl">Zone afectate</label>
+        <div class="check-group" id="zone-afect">
+          <label class="fcb"><input type="checkbox"><span>Față</span></label>
+          <label class="fcb"><input type="checkbox"><span>Obraji</span></label>
+          <label class="fcb"><input type="checkbox"><span>Frunte</span></label>
+          <label class="fcb"><input type="checkbox"><span>Bărbie</span></label>
+          <label class="fcb"><input type="checkbox"><span>Nas</span></label>
+          <label class="fcb"><input type="checkbox"><span>Corp</span></label>
+          <label class="fcb"><input type="checkbox"><span>Spate</span></label>
+        </div>
+      </div>
+      <div class="field">
+        <label class="lbl">Simptome asociate</label>
+        <div class="check-group">
+          <label class="fcb"><input type="checkbox"><span>Roșeață</span></label>
+          <label class="fcb"><input type="checkbox"><span>Mâncărime</span></label>
+          <label class="fcb"><input type="checkbox"><span>Arsuri</span></label>
+          <label class="fcb"><input type="checkbox"><span>Coșuri cu puroi (pustule)</span></label>
+          <label class="fcb"><input type="checkbox"><span>Vase sparte</span></label>
+          <label class="fcb"><input type="checkbox"><span>Pori dilatați</span></label>
+        </div>
+      </div>
+      <div class="field">
+        <label class="lbl">Factori care agravează pielea</label>
+        <div class="check-group">
+          <label class="fcb"><input type="checkbox"><span>Căldură</span></label>
+          <label class="fcb"><input type="checkbox"><span>Frig</span></label>
+          <label class="fcb"><input type="checkbox"><span>Soare</span></label>
+          <label class="fcb"><input type="checkbox"><span>Stres</span></label>
+          <label class="fcb"><input type="checkbox"><span>Alcool</span></label>
+          <label class="fcb"><input type="checkbox"><span>Alimente picante</span></label>
+          <label class="fcb"><input type="checkbox"><span>Menstruație</span></label>
+          <label class="fcb"><input type="checkbox"><span>Transpirație</span></label>
+        </div>
+      </div>
+
+
+
+    </div>
+  </div>
+
+  <!-- 3. DIMENSIUNEA EMOȚIONALĂ -->
+  <div class="section">
+    <div class="section-head">
+      <div class="section-num">3</div>
+      <div>
+        <div class="section-title">Dimensiunea emoțională</div>
+        <div class="section-sub">Nu există răspunsuri corecte sau greșite — totul e confidențial și tratat cu blândețe</div>
+      </div>
+    </div>
+    <div class="section-body">
+      <div class="field">
+        <label class="lbl">Îți amintești ce se întâmpla în viața ta când a apărut afecțiunea de piele?</label>
+        <textarea id="f-situatie" rows="2" placeholder="Ce situație trăiai atunci?"></textarea>
+      </div>
+      <div class="field">
+        <label class="lbl">Ce stări emoționale simți cel mai des?</label>
+        <div class="check-group">
+          <label class="fcb"><input type="checkbox"><span>Rușine</span></label>
+          <label class="fcb"><input type="checkbox"><span>Vină</span></label>
+          <label class="fcb"><input type="checkbox"><span>Frică / Pericol</span></label>
+          <label class="fcb"><input type="checkbox"><span>Neîncredere în viață</span></label>
+          <label class="fcb"><input type="checkbox"><span>Îndoială de sine</span></label>
+          <label class="fcb"><input type="checkbox"><span>Frustrare</span></label>
+          <label class="fcb"><input type="checkbox"><span>Neacceptare</span></label>
+          <label class="fcb"><input type="checkbox"><span>Suprimare emoțională</span></label>
+          <label class="fcb"><input type="checkbox"><span>Tristețe</span></label>
+          <label class="fcb"><input type="checkbox"><span>Furie reținută</span></label>
+          <label class="fcb"><input type="checkbox"><span>Anxietate</span></label>
+          <label class="fcb"><input type="checkbox"><span>Mă simt bine în general</span></label>
+        </div>
+      </div>
+      <div class="field">
+        <label class="lbl">Ce gânduri despre tine sau viața ta apar cel mai frecvent?</label>
+        <textarea id="f-ganduri" rows="2" placeholder="Descrie liber..."></textarea>
+      </div>
+      <div class="field">
+        <label class="lbl">Există ceva ce simți că nu poți exprima sau spune?</label>
+        <div class="radio-group" style="margin-bottom:10px;">
+          <label class="frb"><input type="radio" name="suprimare" value="nu"><span>Nu</span></label>
+          <label class="frb"><input type="radio" name="suprimare" value="uneori"><span>Uneori</span></label>
+          <label class="frb"><input type="radio" name="suprimare" value="da"><span>Da, des</span></label>
+        </div>
+        <textarea id="f-suprimare" rows="2" placeholder="Dacă vrei, detaliază..."></textarea>
+      </div>
+      <div class="field">
+        <label class="lbl">Cum te raportezi la propria imagine / aspectul tău fizic?</label>
+        <div class="radio-group">
+          <label class="frb"><input type="radio" name="imagine" value="accept"><span>Mă accept în general</span></label>
+          <label class="frb"><input type="radio" name="imagine" value="greu"><span>Îmi e greu să mă accept</span></label>
+          <label class="frb"><input type="radio" name="imagine" value="critic"><span>Sunt foarte critic/ă</span></label>
+          <label class="frb"><input type="radio" name="imagine" value="variaza"><span>Variază mult</span></label>
+        </div>
+      </div>
+      <div class="field">
+        <label class="lbl">Pielea se înrăutățește clar după emoții intense sau conflicte?</label>
+        <div class="radio-group" style="margin-bottom:10px;">
+          <label class="frb"><input type="radio" name="piele-emotii" value="nu"><span>Nu am observat</span></label>
+          <label class="frb"><input type="radio" name="piele-emotii" value="uneori"><span>Uneori</span></label>
+          <label class="frb"><input type="radio" name="piele-emotii" value="da"><span>Da, clar</span></label>
+        </div>
+        <textarea id="f-piele-emotii" rows="2" placeholder="Dacă da, descrie contextul..."></textarea>
+      </div>
+
+      <!-- ✦ ÎNTREBĂRI NOI PSIHOEMOȚIONALE -->
+      <div style="background:linear-gradient(135deg,rgba(184,155,106,0.08),rgba(138,158,140,0.06)); border-radius:10px; padding:20px; margin-top:8px; border:1px solid rgba(184,155,106,0.2);">
+        <div style="font-size:11px; letter-spacing:2px; text-transform:uppercase; color:var(--gold); margin-bottom:4px; font-weight:500;">✦ Explorare profundă</div>
+        <p style="font-size:13px; color:var(--sage); margin-bottom:20px; line-height:1.5;">Aceste întrebări sunt profund personale. Nu căutăm răspunsuri perfecte — ci sincere.</p>
+
+        <!-- Q1: Neacceptare de sine -->
+        <div class="field psych-field">
+          <label class="lbl">Există ceva la tine (trăsături, comportamente, manifestări) ce nu îți place și ai vrea să schimbi?</label>
+          <div class="radio-group psych-trigger" data-target="det-neacceptare" style="margin-bottom:10px;">
+            <label class="frb"><input type="radio" name="psych-neacceptare" value="nu"><span>Nu</span></label>
+            <label class="frb"><input type="radio" name="psych-neacceptare" value="uneori"><span>Uneori</span></label>
+            <label class="frb"><input type="radio" name="psych-neacceptare" value="da"><span>Da</span></label>
+          </div>
+          <div class="psych-detail" id="det-neacceptare" style="display:none;">
+            <div class="note-box" style="margin-bottom:10px;">Descrie ce anume nu accepți la tine — poate fi legat de corp, caracter, reacții emoționale, comportamente în relații sau față de tine însuți/însăți.</div>
+            <textarea id="f-neacceptare" rows="3" placeholder="Ex: mă enervez ușor și regret după, nu mă pot opri din mâncat când sunt stresat/ă, îmi e rușine de corpul meu..."></textarea>
+          </div>
+        </div>
+
+        <!-- Q2: Ce vreau dar nu îmi permit -->
+        <div class="field psych-field">
+          <label class="lbl">Există ceva ce îți dorești, dar nu îți permiți să faci?</label>
+          <div class="radio-group psych-trigger" data-target="det-permis" style="margin-bottom:10px;">
+            <label class="frb"><input type="radio" name="psych-permis" value="nu"><span>Nu</span></label>
+            <label class="frb"><input type="radio" name="psych-permis" value="uneori"><span>Uneori</span></label>
+            <label class="frb"><input type="radio" name="psych-permis" value="da"><span>Da</span></label>
+          </div>
+          <div class="psych-detail" id="det-permis" style="display:none;">
+            <div class="note-box" style="margin-bottom:10px;">Poate fi ceva legat de relații, muncă, plăceri personale, odihnă, exprimare de sine — lucruri pe care le dorești dar le oprești din diverse motive (frică, vină, rușine, reguli interioare).</div>
+            <textarea id="f-permis" rows="3" placeholder="Ex: vreau să plec din job dar nu îndrăznesc, vreau să îmi iau timp pentru mine dar simt că nu merit, vreau să spun nu dar nu pot..."></textarea>
+          </div>
+        </div>
+
+        <!-- Q3a: Situații de tensiune -->
+        <div class="field psych-field">
+          <label class="lbl">Există situații la care te gândești și simți tensiune?</label>
+          <div class="radio-group psych-trigger" data-target="det-tensiune" style="margin-bottom:10px;">
+            <label class="frb"><input type="radio" name="psych-tensiune" value="nu"><span>Nu</span></label>
+            <label class="frb"><input type="radio" name="psych-tensiune" value="uneori"><span>Uneori</span></label>
+            <label class="frb"><input type="radio" name="psych-tensiune" value="da"><span>Da</span></label>
+          </div>
+          <div class="psych-detail" id="det-tensiune" style="display:none;">
+            <div class="note-box" style="margin-bottom:10px;">Uneori e suficient să numești tema — ex: „o relație", „ceva din trecut", „situația de la muncă".</div>
+            <textarea id="f-tensiune" rows="3" placeholder="Ex: mă gândesc la o relație și simt strângere în piept, anumite conversații mă fac să mă închid..."></textarea>
+          </div>
+        </div>
+
+        <!-- Q3b: Evitare -->
+        <div class="field psych-field">
+          <label class="lbl">Există ceva ce eviți să-ți amintești sau la care refuzi să te gândești?</label>
+          <div class="radio-group psych-trigger" data-target="det-evitare" style="margin-bottom:10px;">
+            <label class="frb"><input type="radio" name="psych-evitare" value="nu"><span>Nu</span></label>
+            <label class="frb"><input type="radio" name="psych-evitare" value="uneori"><span>Uneori</span></label>
+            <label class="frb"><input type="radio" name="psych-evitare" value="da"><span>Da</span></label>
+          </div>
+          <div class="psych-detail" id="det-evitare" style="display:none;">
+            <div class="note-box" style="margin-bottom:10px;">Nu trebuie să detaliezi tot — orice ai numi e deja un pas important.</div>
+            <textarea id="f-evitare" rows="3" placeholder="Ex: evit să mă gândesc la ceva din trecut, la o relație, la o decizie pe care nu am luat-o..."></textarea>
+          </div>
+        </div>
+
+        <!-- Q4: Masca socială -->
+        <div class="field psych-field">
+          <label class="lbl">Există momente când spui altora ceva diferit de ce simți cu adevărat?</label>
+          <div class="radio-group psych-trigger" data-target="det-masca" style="margin-bottom:10px;">
+            <label class="frb"><input type="radio" name="psych-masca" value="nu"><span>Nu</span></label>
+            <label class="frb"><input type="radio" name="psych-masca" value="uneori"><span>Uneori</span></label>
+            <label class="frb"><input type="radio" name="psych-masca" value="des"><span>Des</span></label>
+          </div>
+          <div class="psych-detail" id="det-masca" style="display:none;">
+            <div class="note-box" style="margin-bottom:10px;">Descrie în ce contexte se întâmplă cel mai des și cum te simți după — ușurat/ă, vinovat/ă, gol/ă, epuizat/ă?</div>
+            <textarea id="f-masca" rows="3" placeholder="Ex: zic că sunt bine când nu sunt, zâmbesc deși sunt furios/furioasă, la muncă mă prefac că sunt de acord deși nu sunt..."></textarea>
+          </div>
+        </div>
+
+        <!-- Q5: Ruminație / blocaj decizional -->
+        <div class="field psych-field" style="margin-bottom:0;">
+          <label class="lbl">Există momente când te învârți în aceleași gânduri fără să ajungi la o decizie?</label>
+          <div class="radio-group psych-trigger" data-target="det-ruminatie" style="margin-bottom:10px;">
+            <label class="frb"><input type="radio" name="psych-ruminatie" value="nu"><span>Nu</span></label>
+            <label class="frb"><input type="radio" name="psych-ruminatie" value="uneori"><span>Uneori</span></label>
+            <label class="frb"><input type="radio" name="psych-ruminatie" value="des"><span>Des, îmi afectează liniștea</span></label>
+          </div>
+          <div class="psych-detail" id="det-ruminatie" style="display:none;">
+            <div class="note-box" style="margin-bottom:10px;">Ce teme apar cel mai des în aceste bucle de gânduri? (relații, muncă, viitor, imaginea de sine, sănătate, decizii neluate)</div>
+            <textarea id="f-ruminatie" rows="3" placeholder="Ex: mă gândesc mereu dacă am luat decizia bună, reiau în minte conversații, nu știu ce să fac cu o relație și mă macin..."></textarea>
+          </div>
+        </div>
+
+      </div><!-- end psych block -->
+
+    </div>
+  </div>
+
+  <!-- 4. DIGESTIE & MICROBIOM -->
+  <div class="section">
+    <div class="section-head">
+      <div class="section-num">4</div>
+      <div>
+        <div class="section-title">Digestie & microbiom</div>
+        <div class="section-sub">Cheie</div>
+      </div>
+    </div>
+    <div class="section-body">
+      <div class="yn-row">
+        <span class="yn-label">Balonare</span>
+        <div class="radio-group">
+          <label class="frb"><input type="radio" name="balon" value="zilnic"><span>Zilnic</span></label>
+          <label class="frb"><input type="radio" name="balon" value="uneori"><span>Uneori</span></label>
+          <label class="frb"><input type="radio" name="balon" value="nu"><span>Nu</span></label>
+        </div>
+      </div>
+      <div class="yn-row">
+        <span class="yn-label">Gaze frecvente</span>
+        <div class="yb-wrap">
+          <button class="yb" data-q="gaze" data-v="da" data-cat="dig">Da</button>
+          <button class="yb" data-q="gaze" data-v="nu" data-cat="dig">Nu</button>
+        </div>
+      </div>
+      <div class="yn-row">
+        <span class="yn-label">Digestie lentă (mâncare stă greu pe stomac)</span>
+        <div class="yb-wrap">
+          <button class="yb" data-q="dig-lenta" data-v="da" data-cat="dig">Da</button>
+          <button class="yb" data-q="dig-lenta" data-v="nu" data-cat="dig">Nu</button>
+        </div>
+      </div>
+      <div class="yn-row">
+        <span class="yn-label">Balonare după carbohidrați / pâine / paste</span>
+        <div class="yb-wrap">
+          <button class="yb" data-q="balon-carbo" data-v="da" data-cat="dig">Da</button>
+          <button class="yb" data-q="balon-carbo" data-v="nu" data-cat="dig">Nu</button>
+        </div>
+      </div>
+      <div class="yn-row">
+        <span class="yn-label">Reflux sau arsuri stomacale</span>
+        <div class="yb-wrap">
+          <button class="yb" data-q="reflux" data-v="da" data-cat="dig">Da</button>
+          <button class="yb" data-q="reflux" data-v="nu" data-cat="dig">Nu</button>
+        </div>
+      </div>
+      <div class="field" style="margin-top:16px;">
+        <label class="lbl">Tranzit intestinal</label>
+        <div class="radio-group">
+          <label class="frb"><input type="radio" name="tranzit" value="const"><span>Constipație</span></label>
+          <label class="frb"><input type="radio" name="tranzit" value="diar"><span>Diaree</span></label>
+          <label class="frb"><input type="radio" name="tranzit" value="alt"><span>Alternant</span></label>
+          <label class="frb"><input type="radio" name="tranzit" value="norm"><span>Normal</span></label>
+        </div>
+      </div>
+      <div class="field">
+        <label class="lbl">Aspect scaun</label>
+        <div class="radio-group">
+          <label class="frb"><input type="radio" name="scaun" value="norm"><span>Normal</span></label>
+          <label class="frb"><input type="radio" name="scaun" value="moale"><span>Moale</span></label>
+          <label class="frb"><input type="radio" name="scaun" value="tare"><span>Tare</span></label>
+          <label class="frb"><input type="radio" name="scaun" value="neformat"><span>Neformat</span></label>
+        </div>
+      </div>
+      <div class="field">
+        <label class="lbl">Intoleranțe alimentare</label>
+        <div class="radio-group" style="margin-bottom:10px;">
+          <label class="frb"><input type="radio" name="intol" value="nu"><span>Nu știu</span></label>
+          <label class="frb"><input type="radio" name="intol" value="suspectez"><span>Suspectez</span></label>
+          <label class="frb"><input type="radio" name="intol" value="da"><span>Da, știu</span></label>
+        </div>
+        <textarea id="f-intol-det" rows="2" placeholder="Dacă da, descrie..."></textarea>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5. SEMNALE INTERNE -->
+  <div class="section">
+    <div class="section-head">
+      <div class="section-num">5</div>
+      <div>
+        <div class="section-title">Semnale interne & inflamație ascunsă</div>
+        <div class="section-sub">Important</div>
+      </div>
+    </div>
+    <div class="section-body">
+      <div class="yn-row">
+        <span class="yn-label">Limbă albă / încărcată dimineața</span>
+        <div class="yb-wrap">
+          <button class="yb" data-q="limba" data-v="da" data-cat="inf">Da</button>
+          <button class="yb" data-q="limba" data-v="nu" data-cat="inf">Nu</button>
+        </div>
+      </div>
+      <div class="yn-row">
+        <span class="yn-label">Respirație urât mirositoare frecventă</span>
+        <div class="yb-wrap">
+          <button class="yb" data-q="resp-urat" data-v="da" data-cat="inf">Da</button>
+          <button class="yb" data-q="resp-urat" data-v="nu" data-cat="inf">Nu</button>
+        </div>
+      </div>
+      <div class="yn-row">
+        <span class="yn-label">Dureri / disconfort în stomac dimineața, înainte de masă</span>
+        <div class="yb-wrap">
+          <button class="yb" data-q="durere-dim" data-v="da" data-cat="inf">Da</button>
+          <button class="yb" data-q="durere-dim" data-v="nu" data-cat="inf">Nu</button>
+        </div>
+      </div>
+      <div class="yn-row">
+        <span class="yn-label">Poftă mare de dulce / zahăr / carbohidrați</span>
+        <div class="yb-wrap">
+          <button class="yb" data-q="pofta-dulce" data-v="da" data-cat="inf">Da</button>
+          <button class="yb" data-q="pofta-dulce" data-v="nu" data-cat="inf">Nu</button>
+        </div>
+      </div>
+      <div class="yn-row">
+        <span class="yn-label">Fluctuații mari de energie în cursul zilei</span>
+        <div class="yb-wrap">
+          <button class="yb" data-q="energie" data-v="da" data-cat="inf">Da</button>
+          <button class="yb" data-q="energie" data-v="nu" data-cat="inf">Nu</button>
+        </div>
+      </div>
+      <div class="yn-row">
+        <span class="yn-label">Probleme cu pielea scalpului (mătreață, iritație)</span>
+        <div class="yb-wrap">
+          <button class="yb" data-q="scalp" data-v="da" data-cat="inf">Da</button>
+          <button class="yb" data-q="scalp" data-v="nu" data-cat="inf">Nu</button>
+        </div>
+      </div>
+      <div class="yn-row">
+        <span class="yn-label">Unghii fragile / cu dungi sau pete albe</span>
+        <div class="yb-wrap">
+          <button class="yb" data-q="unghii" data-v="da" data-cat="inf">Da</button>
+          <button class="yb" data-q="unghii" data-v="nu" data-cat="inf">Nu</button>
+        </div>
+      </div>
+      <div class="field" style="margin-top:16px;">
+        <label class="lbl">Când apare pofta de dulce?</label>
+        <div class="check-group">
+          <label class="fcb"><input type="checkbox"><span>Dimineața</span></label>
+          <label class="fcb"><input type="checkbox"><span>După masă</span></label>
+          <label class="fcb"><input type="checkbox"><span>Seara</span></label>
+          <label class="fcb"><input type="checkbox"><span>La stres</span></label>
+          <label class="fcb"><input type="checkbox"><span>Continuu</span></label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 6. INFLAMAȚIE SISTEMICĂ -->
+  <div class="section">
+    <div class="section-head">
+      <div class="section-num">6</div>
+      <div>
+        <div class="section-title">Inflamație sistemică</div>
+        <div class="section-sub">Scor separat</div>
+      </div>
+    </div>
+    <div class="section-body">
+      <div class="yn-row"><span class="yn-label">Oboseală cronică (chiar și după somn)</span><div class="yb-wrap"><button class="yb" data-q="oboseala" data-v="da" data-cat="inf">Da</button><button class="yb" data-q="oboseala" data-v="nu" data-cat="inf">Nu</button></div></div>
+      <div class="yn-row"><span class="yn-label">Ceață mentală / dificultate de concentrare</span><div class="yb-wrap"><button class="yb" data-q="ceata" data-v="da" data-cat="inf">Da</button><button class="yb" data-q="ceata" data-v="nu" data-cat="inf">Nu</button></div></div>
+      <div class="yn-row"><span class="yn-label">Dureri de cap frecvente</span><div class="yb-wrap"><button class="yb" data-q="dur-cap" data-v="da" data-cat="inf">Da</button><button class="yb" data-q="dur-cap" data-v="nu" data-cat="inf">Nu</button></div></div>
+      <div class="yn-row"><span class="yn-label">Dureri articulare</span><div class="yb-wrap"><button class="yb" data-q="dur-art" data-v="da" data-cat="inf">Da</button><button class="yb" data-q="dur-art" data-v="nu" data-cat="inf">Nu</button></div></div>
+      <div class="yn-row"><span class="yn-label">Retenție de apă / umflături</span><div class="yb-wrap"><button class="yb" data-q="retentie" data-v="da" data-cat="inf">Da</button><button class="yb" data-q="retentie" data-v="nu" data-cat="inf">Nu</button></div></div>
+      <div class="yn-row"><span class="yn-label">Imunitate scăzută / răceli frecvente</span><div class="yb-wrap"><button class="yb" data-q="imunit" data-v="da" data-cat="inf">Da</button><button class="yb" data-q="imunit" data-v="nu" data-cat="inf">Nu</button></div></div>
+      <div class="yn-row"><span class="yn-label">Alergii (alimentare, respiratorii, cutanate)</span><div class="yb-wrap"><button class="yb" data-q="alergii" data-v="da" data-cat="inf">Da</button><button class="yb" data-q="alergii" data-v="nu" data-cat="inf">Nu</button></div></div>
+    </div>
+  </div>
+
+  <!-- 7. ALIMENTAȚIE -->
+  <div class="section">
+    <div class="section-head">
+      <div class="section-num">7</div>
+      <div>
+        <div class="section-title">Alimentație</div>
+        <div class="section-sub">Obiceiuri alimentare zilnice</div>
+      </div>
+    </div>
+    <div class="section-body">
+      <div class="field">
+        <label class="lbl">Număr mese pe zi</label>
+        <select id="f-mese">
+          <option value="">Selectați...</option>
+          <option>1 masă</option>
+          <option>2 mese</option>
+          <option>3 mese</option>
+          <option>4+ mese</option>
+        </select>
+      </div>
+      <div class="field">
+        <label class="lbl">Apă zilnică</label>
+        <div class="radio-group">
+          <label class="frb"><input type="radio" name="apa" value="insuf"><span>Insuficient (&lt;1.5L)</span></label>
+          <label class="frb"><input type="radio" name="apa" value="suf"><span>Suficient (1.5–2.5L)</span></label>
+          <label class="frb"><input type="radio" name="apa" value="mult"><span>Mult (&gt;2.5L)</span></label>
+        </div>
+      </div>
+      <div class="field">
+        <label class="lbl">Tip apă consumată</label>
+        <div class="radio-group">
+          <label class="frb"><input type="radio" name="tip-apa" value="robinet"><span>Robinet</span></label>
+          <label class="frb"><input type="radio" name="tip-apa" value="plastic"><span>Sticlă plastic</span></label>
+          <label class="frb"><input type="radio" name="tip-apa" value="sticla"><span>Sticlă de sticlă</span></label>
+          <label class="frb"><input type="radio" name="tip-apa" value="filtru"><span>Filtru</span></label>
+        </div>
+      </div>
+      <div class="field">
+        <label class="lbl">Consum frecvent (cel puțin 3×/săptămână)</label>
+        <div class="check-group">
+          <label class="fcb"><input type="checkbox"><span>Zahăr / dulciuri</span></label>
+          <label class="fcb"><input type="checkbox"><span>Lactate</span></label>
+          <label class="fcb"><input type="checkbox"><span>Gluten / pâine</span></label>
+          <label class="fcb"><input type="checkbox"><span>Fast food</span></label>
+          <label class="fcb"><input type="checkbox"><span>Alcool</span></label>
+          <label class="fcb"><input type="checkbox"><span>Cafea</span></label>
+          <label class="fcb"><input type="checkbox"><span>Carne roșie</span></label>
+          <label class="fcb"><input type="checkbox"><span>Prăjeli</span></label>
+        </div>
+      </div>
+      <div class="field">
+        <label class="lbl">Alimente care agravează pielea (dacă știți)</label>
+        <textarea id="f-alim-agrav" rows="2" placeholder="Ex: lapte, ciocolată, pâine albă..."></textarea>
+      </div>
+
+      <!-- ✦ ÎNTREBARE NOUĂ 2: O zi din viața ta -->
+      <div class="field field-new">
+        <label class="lbl">Descrie o zi tipică din viața ta</label>
+        <div class="note-box">Ține cont de orar, activități, mese și tipul meselor. Aceasta ne ajută să înțelegem ritmul circadian, modelele alimentare și factorii de stres zilnici care pot influența pielea.</div>
+        <div style="display:flex; flex-direction:column; gap:12px;">
+          <div>
+            <label style="font-size:12px; color:var(--sage); display:block; margin-bottom:6px;">⏰ Dimineața (trezire, mic dejun, activitate)</label>
+            <textarea id="f-zi-dimineata" rows="3" placeholder="Ex: Mă trezesc la 7, beau cafea, nu mănânc dimineața, merg la birou..."></textarea>
+          </div>
+          <div>
+            <label style="font-size:12px; color:var(--sage); display:block; margin-bottom:6px;">☀️ Ziua (prânz, activitate, mese)</label>
+            <textarea id="f-zi-zi" rows="3" placeholder="Ex: Prânz la 13 — sandwich + suc, stau la birou 8h, gustare dulce..."></textarea>
+          </div>
+          <div>
+            <label style="font-size:12px; color:var(--sage); display:block; margin-bottom:6px;">🌙 Seara (cina, relaxare, culcare)</label>
+            <textarea id="f-zi-seara" rows="3" placeholder="Ex: Cina la 21, carne cu paste, mă uit la telefon, dorm la 24..."></textarea>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 8. MICROBIOM & CANDIDOZĂ -->
+  <div class="section">
+    <div class="section-head">
+      <div class="section-num">8</div>
+      <div>
+        <div class="section-title">Microbiom & candidoză</div>
+      </div>
+    </div>
+    <div class="section-body">
+      <div class="yn-row"><span class="yn-label">Candidoză diagnosticată sau recurentă</span><div class="yb-wrap"><button class="yb" data-q="candida" data-v="da" data-cat="micro">Da</button><button class="yb" data-q="candida" data-v="nu" data-cat="micro">Nu</button></div></div>
+      <div class="yn-row"><span class="yn-label">Infecții urinare frecvente</span><div class="yb-wrap"><button class="yb" data-q="inf-urin" data-v="da" data-cat="micro">Da</button><button class="yb" data-q="inf-urin" data-v="nu" data-cat="micro">Nu</button></div></div>
+      <div class="yn-row"><span class="yn-label">Afte recurente (în gură)</span><div class="yb-wrap"><button class="yb" data-q="afte" data-v="da" data-cat="micro">Da</button><button class="yb" data-q="afte" data-v="nu" data-cat="micro">Nu</button></div></div>
+      <div class="yn-row"><span class="yn-label">Herpes labial recurent</span><div class="yb-wrap"><button class="yb" data-q="herpes" data-v="da" data-cat="micro">Da</button><button class="yb" data-q="herpes" data-v="nu" data-cat="micro">Nu</button></div></div>
+      <div class="yn-row"><span class="yn-label">Infecții ale pielii frecvente</span><div class="yb-wrap"><button class="yb" data-q="inf-piele" data-v="da" data-cat="micro">Da</button><button class="yb" data-q="inf-piele" data-v="nu" data-cat="micro">Nu</button></div></div>
+    </div>
+  </div>
+
+  <!-- 9. HORMONI -->
+  <div class="section">
+    <div class="section-head">
+      <div class="section-num">9</div>
+      <div>
+        <div class="section-title">Hormoni</div>
+      </div>
+    </div>
+    <div class="section-body">
+      <div class="yn-row"><span class="yn-label">Ciclu menstrual neregulat (femei)</span><div class="yb-wrap"><button class="yb" data-q="ciclu" data-v="da" data-cat="horm">Da</button><button class="yb" data-q="ciclu" data-v="nu" data-cat="horm">Nu</button><button class="yb" data-q="ciclu" data-v="na" data-cat="horm">N/A</button></div></div>
+      <div class="yn-row"><span class="yn-label">Acnee agravată înainte de menstruație</span><div class="yb-wrap"><button class="yb" data-q="pms-acnee" data-v="da" data-cat="horm">Da</button><button class="yb" data-q="pms-acnee" data-v="nu" data-cat="horm">Nu</button><button class="yb" data-q="pms-acnee" data-v="na" data-cat="horm">N/A</button></div></div>
+      <div class="yn-row"><span class="yn-label">PCOS sau altă afecțiune hormonală</span><div class="yb-wrap"><button class="yb" data-q="pcos" data-v="da" data-cat="horm">Da</button><button class="yb" data-q="pcos" data-v="nu" data-cat="horm">Nu</button></div></div>
+      <div class="yn-row"><span class="yn-label">Hipotiroidism sau boală tiroidiană</span><div class="yb-wrap"><button class="yb" data-q="tiroid" data-v="da" data-cat="horm">Da</button><button class="yb" data-q="tiroid" data-v="nu" data-cat="horm">Nu</button></div></div>
+      <div class="yn-row"><span class="yn-label">Diabet sau rezistență la insulină</span><div class="yb-wrap"><button class="yb" data-q="diab" data-v="da" data-cat="horm">Da</button><button class="yb" data-q="diab" data-v="nu" data-cat="horm">Nu</button></div></div>
+    </div>
+  </div>
+
+  <!-- 10. SOMN & STIL DE VIAȚĂ -->
+  <div class="section">
+    <div class="section-head">
+      <div class="section-num">10</div>
+      <div>
+        <div class="section-title">Somn & stil de viață</div>
+      </div>
+    </div>
+    <div class="section-body">
+      <div class="field">
+        <label class="lbl">Ore de somn pe noapte</label>
+        <select id="f-somn">
+          <option value="">Selectați...</option>
+          <option>Sub 5 ore</option>
+          <option>5–6 ore</option>
+          <option>7–8 ore</option>
+          <option>Peste 8 ore</option>
+        </select>
+      </div>
+      <div class="field">
+        <label class="lbl">Vă treziți odihnit?</label>
+        <div class="radio-group">
+          <label class="frb"><input type="radio" name="odihn" value="da"><span>Da</span></label>
+          <label class="frb"><input type="radio" name="odihn" value="uneori"><span>Uneori</span></label>
+          <label class="frb"><input type="radio" name="odihn" value="nu"><span>Nu</span></label>
+        </div>
+      </div>
+      <div class="field">
+        <label class="lbl">Activitate fizică</label>
+        <div class="radio-group">
+          <label class="frb"><input type="radio" name="sport" value="Deloc"><span>Deloc</span></label>
+          <label class="frb"><input type="radio" name="sport" value="Ocazional"><span>Ocazional (1×/săpt.)</span></label>
+          <label class="frb"><input type="radio" name="sport" value="Regulat"><span>Regulat (2–3×)</span></label>
+          <label class="frb"><input type="radio" name="sport" value="Frecvent"><span>Frecvent (4+×)</span></label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 11. MEDICAMENTE & SUPLIMENTE -->
+  <div class="section">
+    <div class="section-head">
+      <div class="section-num">11</div>
+      <div>
+        <div class="section-title">Medicamente & suplimente</div>
+      </div>
+    </div>
+    <div class="section-body">
+      <div class="field">
+        <label class="lbl">Medicamente actuale (contraceptive, antiacide, cortizon etc.)</label>
+        <div class="radio-group" style="margin-bottom:10px;">
+          <label class="frb"><input type="radio" name="med" value="nu"><span>Nu iau</span></label>
+          <label class="frb"><input type="radio" name="med" value="da"><span>Da</span></label>
+        </div>
+        <textarea id="f-med-det" rows="2" placeholder="Specifică medicamentele..."></textarea>
+      </div>
+      <div class="field">
+        <label class="lbl">Antibiotice în ultimele 6–12 luni</label>
+        <div class="radio-group" style="margin-bottom:10px;">
+          <label class="frb"><input type="radio" name="abio" value="Nu"><span>Nu</span></label>
+          <label class="frb"><input type="radio" name="abio" value="Da"><span>Da</span></label>
+        </div>
+        <textarea id="f-abio-det" rows="2" placeholder="Dacă da, pentru ce afecțiune?"></textarea>
+      </div>
+      <div class="field">
+        <label class="lbl">Suplimente (probiotice, zinc, omega-3, vitamina D etc.)</label>
+        <div class="radio-group" style="margin-bottom:10px;">
+          <label class="frb"><input type="radio" name="supl" value="nu"><span>Nu</span></label>
+          <label class="frb"><input type="radio" name="supl" value="da"><span>Da</span></label>
+        </div>
+        <textarea id="f-supl-det" rows="2" placeholder="Specifică suplimentele..."></textarea>
+      </div>
+    </div>
+  </div>
+
+  <!-- 12. ISTORIC MEDICAL -->
+  <div class="section">
+    <div class="section-head">
+      <div class="section-num">12</div>
+      <div>
+        <div class="section-title">Istoric medical</div>
+        <div class="section-sub">Boli digestive & autoimune</div>
+      </div>
+    </div>
+    <div class="section-body">
+      <div class="yn-row"><span class="yn-label">Colită sau boală inflamatorie intestinală</span><div class="yb-wrap"><button class="yb" data-q="colita" data-v="da" data-cat="med">Da</button><button class="yb" data-q="colita" data-v="nu" data-cat="med">Nu</button></div></div>
+      <div class="yn-row"><span class="yn-label">Sindromul intestinului iritabil (colon spastic)</span><div class="yb-wrap"><button class="yb" data-q="colon" data-v="da" data-cat="med">Da</button><button class="yb" data-q="colon" data-v="nu" data-cat="med">Nu</button></div></div>
+      <div class="yn-row"><span class="yn-label">Artrită reumatoidă sau lupus</span><div class="yb-wrap"><button class="yb" data-q="artrita" data-v="da" data-cat="med">Da</button><button class="yb" data-q="artrita" data-v="nu" data-cat="med">Nu</button></div></div>
+      <div class="yn-row"><span class="yn-label">Sinuzite sau rinite frecvente</span><div class="yb-wrap"><button class="yb" data-q="sinuz" data-v="da" data-cat="med">Da</button><button class="yb" data-q="sinuz" data-v="nu" data-cat="med">Nu</button></div></div>
+      <div class="yn-row"><span class="yn-label">Bronșită recurentă sau astm</span><div class="yb-wrap"><button class="yb" data-q="astm" data-v="da" data-cat="med">Da</button><button class="yb" data-q="astm" data-v="nu" data-cat="med">Nu</button></div></div>
+      <div class="yn-row"><span class="yn-label">Hepatită cronică</span><div class="yb-wrap"><button class="yb" data-q="hepat" data-v="da" data-cat="med">Da</button><button class="yb" data-q="hepat" data-v="nu" data-cat="med">Nu</button></div></div>
+      <div class="yn-row"><span class="yn-label">Boală cardiovasculară sau atac de cord</span><div class="yb-wrap"><button class="yb" data-q="cardio" data-v="da" data-cat="med">Da</button><button class="yb" data-q="cardio" data-v="nu" data-cat="med">Nu</button></div></div>
+      <div class="yn-row"><span class="yn-label">Diabet sau exces de greutate (IMC &gt; 25)</span><div class="yb-wrap"><button class="yb" data-q="diab2" data-v="da" data-cat="med">Da</button><button class="yb" data-q="diab2" data-v="nu" data-cat="med">Nu</button></div></div>
+
+      <!-- ✦ ÎNTREBARE NOUĂ 3: Afecțiuni copilărie -->
+      <div class="field field-new" style="margin-top:20px;">
+        <label class="lbl">Ce afecțiuni / boli ai avut în copilărie (până la 7–8 ani)?</label>
+        <div class="note-box">Istoricul medical din primii ani de viață poate influența microbiomul, imunitatea și predispoziția la inflamație. Orice informație este valoroasă.</div>
+        <div class="check-group" style="margin-bottom:14px;">
+          <label class="fcb"><input type="checkbox"><span>Otite frecvente</span></label>
+          <label class="fcb"><input type="checkbox"><span>Amigdalite recurente</span></label>
+          <label class="fcb"><input type="checkbox"><span>Bronșite / pneumonii</span></label>
+          <label class="fcb"><input type="checkbox"><span>Astm / wheezing</span></label>
+          <label class="fcb"><input type="checkbox"><span>Eczeme / dermatită atopică</span></label>
+          <label class="fcb"><input type="checkbox"><span>Alergii (alimentare / respiratorii)</span></label>
+          <label class="fcb"><input type="checkbox"><span>Probleme digestive cronice</span></label>
+          <label class="fcb"><input type="checkbox"><span>Varicelă / rujeolă / rubeolă</span></label>
+          <label class="fcb"><input type="checkbox"><span>Tratamente prelungite cu antibiotice</span></label>
+          <label class="fcb"><input type="checkbox"><span>Intervenții chirurgicale</span></label>
+          <label class="fcb"><input type="checkbox"><span>Nu îmi amintesc / nu știu</span></label>
+        </div>
+        <textarea id="f-copilarie" rows="3" placeholder="Dacă îți amintești alte detalii — afecțiuni, internări, tratamente lungi — descrie pe scurt..."></textarea>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 13. ÎNGRIJIRE PIELE -->
+  <div class="section">
+    <div class="section-head">
+      <div class="section-num">13</div>
+      <div>
+        <div class="section-title">Îngrijire piele & factori externi</div>
+      </div>
+    </div>
+    <div class="section-body">
+      <div class="field">
+        <label class="lbl">Produse folosite pentru piele</label>
+        <textarea id="f-produse" rows="3" placeholder="Ex: cremă hidratantă, gel de față, SPF, fond de ten..."></textarea>
+      </div>
+      <div class="field">
+        <label class="lbl">Reacții la</label>
+        <div class="check-group">
+          <label class="fcb"><input type="checkbox"><span>Căldură</span></label>
+          <label class="fcb"><input type="checkbox"><span>Frig</span></label>
+          <label class="fcb"><input type="checkbox"><span>Soare</span></label>
+          <label class="fcb"><input type="checkbox"><span>Stres</span></label>
+          <label class="fcb"><input type="checkbox"><span>Alcool</span></label>
+          <label class="fcb"><input type="checkbox"><span>Parfumuri / cosmetice</span></label>
+        </div>
+      </div>
+      <div class="field">
+        <label class="lbl">Observații suplimentare</label>
+        <textarea id="f-obs" rows="3" placeholder="Orice altceva crezi că este relevant..."></textarea>
+      </div>
+    </div>
+  </div>
+
+  <!-- EMAIL + SUBMIT -->
+  <div class="section">
+    <div class="section-head">
+      <div class="section-num">✉</div>
+      <div>
+        <div class="section-title">Copie răspunsuri</div>
+        <div class="section-sub">Opțional — primești pe email o copie a răspunsurilor tale</div>
+      </div>
+    </div>
+    <div class="section-body">
+      <div class="field">
+        <label class="lbl">Emailul tău (opțional)</label>
+        <input type="email" id="f-email-client" placeholder="adresa@email.com">
+        <p style="font-size:12px; color:var(--sage); margin-top:6px;">Dacă completezi emailul, îți trimitem o copie a răspunsurilor date. Nu îl folosim în alt scop.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="submit-area">
+    <button class="submit-btn" onclick="trimitFormular()">Trimit formularul</button>
+    <p class="submit-note">🌿 Datele tale sunt confidențiale și ajung doar la specialiștii ClearSkin Lab.</p>
+  </div>
+
+</div><!-- end form-view -->
+
+<!-- RAPORT -->
+<div id="raport">
+  <div class="raport-hero">
+    <h2>Mulțumim, <span id="r-name"></span></h2>
+    <div class="scor-num" id="r-scor-num">—</div>
+    <div class="scor-label">scor total inflamație</div>
+    <div class="nivel-titlu" id="r-nivel-titlu"></div>
+    <div class="nivel-desc" id="r-nivel-desc"></div>
+  </div>
+
+  <div class="section">
+    <div class="section-head"><div class="section-num">📊</div><div><div class="section-title">Scoruri pe categorii</div></div></div>
+    <div class="section-body">
+      <div class="cat-grid" id="r-cat-grid"></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-head"><div class="section-num">🔍</div><div><div class="section-title">Zone prioritare de investigat</div></div></div>
+    <div class="section-body">
+      <div class="zone-list" id="r-zone-list"></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-head"><div class="section-num">✓</div><div><div class="section-title">Recomandări inițiale</div></div></div>
+    <div class="section-body">
+      <div class="rec-list" id="r-rec-list"></div>
+    </div>
+  </div>
+
+  <div class="raport-footer">
+    <h3>Mulțumim,<br>Formularul tău a ajuns la noi.</h3>
+    <p style="font-size:13px; color:var(--sage); margin-bottom:16px;">Îl vom analiza cu atenție și revenim în <strong>3–5 zile lucrătoare</strong> cu raportul de diagnosticare.</p>
+    <div class="steps">
+      <div class="step"><div class="step-n">1</div><span>Contactează-ne pentru a stabili <strong>sesiunea online de clarificare</strong> — corp, minte, energie.</span></div>
+      <div class="step"><div class="step-n">2</div><span>Specialiștii noștri analizează toate informațiile în detaliu.</span></div>
+      <div class="step"><div class="step-n">3</div><span>Primești <strong>raportul de diagnosticare</strong> în 3–5 zile lucrătoare.</span></div>
+    </div>
+    <a class="contact-link" href="mailto:contact@clearskinlab.ro">Contactează-ne</a>
+  </div>
+</div>
+
+<div class="site-footer">
+  <strong>🌿 ClearSkin Lab</strong>
+  Evaluare nutrițională funcțională pentru piele sănătoasă
+</div>
+
+<script>
+const ans = {};
+
+// Kg section toggle
+const KG_VALS = ['kg-plus','acnee-kg','rozacee-kg','toate'];
+document.querySelectorAll('input[name="tip"]').forEach(radio => {
+  radio.addEventListener('change', () => {
+    const sec = document.getElementById('kg-section');
+    if (KG_VALS.includes(radio.value)) {
+      sec.style.display = 'block';
+      sec.style.animation = 'fadeSlide 0.35s ease';
+    } else {
+      sec.style.display = 'none';
+    }
+  });
+});
+
+// Psychoemotional conditional reveal
+document.querySelectorAll('.psych-trigger').forEach(group => {
+  const targetId = group.dataset.target;
+  const detail = document.getElementById(targetId);
+  if (!detail) return;
+  group.querySelectorAll('.frb').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const val = btn.querySelector('input').value;
+      if (val === 'nu') {
+        detail.style.display = 'none';
+        detail.classList.remove('open');
+      } else {
+        detail.style.display = 'block';
+        setTimeout(() => detail.classList.add('open'), 10);
+      }
+    });
+  });
+});
+
+// Radio buttons
+document.querySelectorAll('#form-view .frb').forEach(b => {
+  b.addEventListener('click', () => {
+    const n = b.querySelector('input').name;
+    document.querySelectorAll(`input[name="${n}"]`).forEach(i => i.closest('.frb').classList.remove('on'));
+    b.classList.add('on');
+    updateProgress();
+  });
+});
+
+// Checkboxes — delegated so it works regardless of load order
+document.addEventListener('click', (e) => {
+  const b = e.target.closest('.fcb');
+  if (b) { b.classList.toggle('on'); updateProgress(); }
+});
+
+// Yes/No buttons
+document.querySelectorAll('#form-view .yb').forEach(btn => {
+  btn.addEventListener('click', (e) => {
+    e.preventDefault(); e.stopPropagation(); e.stopImmediatePropagation();
+    const q = btn.dataset.q, v = btn.dataset.v, cat = btn.dataset.cat;
+    btn.closest('.yb-wrap').querySelectorAll('.yb').forEach(b => b.classList.remove('ya','na'));
+    btn.classList.add((v === 'nu' || v === 'na') ? 'na' : 'ya');
+    ans[q] = { v, cat };
+    updateProgress();
+  });
+});
+
+function updateProgress() {
+  const total = 42;
+  const answered = Object.keys(ans).length + document.querySelectorAll('.frb.on').length / 2;
+  const pct = Math.min(100, Math.round(answered / total * 100));
+  document.getElementById('pbar').style.width = pct + '%';
+}
+
+function getScores() {
+  const s = { inf: 0, dig: 0, micro: 0, horm: 0, med: 0 };
+  const max = { inf: 14, dig: 5, micro: 5, horm: 5, med: 8 };
+  Object.values(ans).forEach(({ v, cat }) => {
+    if (v === 'da' && s[cat] !== undefined) s[cat]++;
+  });
+  return { s, max };
+}
+
+function getRadioVal(name) {
+  const checked = document.querySelector(`input[name="${name}"]:checked`);
+  return checked ? checked.value : '';
+}
+
+async function trimitFormular() {
+  const btn = document.querySelector('.submit-btn');
+  btn.textContent = 'Se trimite...';
+  btn.disabled = true;
+
+  const data = {
+    nume: document.getElementById('f-nume')?.value || '',
+    varsta: document.getElementById('f-varsta')?.value || '',
+    email: document.getElementById('f-email-client')?.value || '',
+    _replyto: document.getElementById('f-email-client')?.value || '',
+    sex: getRadioVal('sex'),
+    ocupatie: document.getElementById('f-occ')?.value || '',
+    stres: document.getElementById('f-stres')?.value || '',
+    tip_problema: getRadioVal('tip'),
+    debut: getRadioVal('debut'),
+    evolutie: getRadioVal('agrav'),
+    de_cand: document.getElementById('f-decand')?.value || '',
+    situatie_emotionala: document.getElementById('f-situatie')?.value || '',
+    ganduri: document.getElementById('f-ganduri')?.value || '',
+    suprimare: getRadioVal('suprimare'),
+    suprimare_detalii: document.getElementById('f-suprimare')?.value || '',
+    imagine: getRadioVal('imagine'),
+    piele_emotii: getRadioVal('piele-emotii'),
+    zi_dimineata: document.getElementById('f-zi-dimineata')?.value || '',
+    zi_zi: document.getElementById('f-zi-zi')?.value || '',
+    zi_seara: document.getElementById('f-zi-seara')?.value || '',
+    afectiuni_copilarie: document.getElementById('f-copilarie')?.value || '',
+    intoleranteCunoscute: getRadioVal('intol'),
+    intoleranteDetalii: document.getElementById('f-intol-det')?.value || '',
+    alim_agrav: document.getElementById('f-alim-agrav')?.value || '',
+    mese_zi: document.getElementById('f-mese')?.value || '',
+    somn: document.getElementById('f-somn')?.value || '',
+    medicamente: document.getElementById('f-med-det')?.value || '',
+    antibiotice: document.getElementById('f-abio-det')?.value || '',
+    suplimente: document.getElementById('f-supl-det')?.value || '',
+    produse_piele: document.getElementById('f-produse')?.value || '',
+    observatii: document.getElementById('f-obs')?.value || '',
+    // Greutate corporală
+    kg_actual: document.getElementById('f-kg-actual')?.value || '',
+    inaltime: document.getElementById('f-inaltime')?.value || '',
+    kg_tinta: document.getElementById('f-kg-tinta')?.value || '',
+    kg_durata: getRadioVal('kg-durata'),
+    kg_debut: getRadioVal('kg-debut'),
+    kg_diete: getRadioVal('kg-diete'),
+    kg_diete_det: document.getElementById('f-kg-diete-det')?.value || '',
+    // Psihoemoțional profund
+    psych_neacceptare: getRadioVal('psych-neacceptare'),
+    psych_neacceptare_det: document.getElementById('f-neacceptare')?.value || '',
+    psych_permis: getRadioVal('psych-permis'),
+    psych_permis_det: document.getElementById('f-permis')?.value || '',
+    psych_tensiune: getRadioVal('psych-tensiune'),
+    psych_tensiune_det: document.getElementById('f-tensiune')?.value || '',
+    psych_evitare: getRadioVal('psych-evitare'),
+    psych_evitare_det: document.getElementById('f-evitare')?.value || '',
+    psych_masca: getRadioVal('psych-masca'),
+    psych_masca_det: document.getElementById('f-masca')?.value || '',
+    psych_ruminatie: getRadioVal('psych-ruminatie'),
+    psych_ruminatie_det: document.getElementById('f-ruminatie')?.value || '',
+    raspunsuri_da_nu: Object.entries(ans).map(([k,v])=>`${k}: ${v.v}`).join(' | '),
+    scor_total: `${Object.values(getScores().s).reduce((a,b)=>a+b,0)} / 38`,
+  };
+
+  try {
+    const res = await fetch('https://formspree.io/f/maqlgyjd', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify(data)
+    });
+    if (res.ok) {
+      genereazaRaport();
+    } else {
+      btn.textContent = 'Trimit formularul';
+      btn.disabled = false;
+      alert('Eroare ' + res.status + '. Te rugăm să încerci din nou.');
+    }
+  } catch(e) {
+    btn.textContent = 'Trimit formularul';
+    btn.disabled = false;
+    alert('Eroare de conexiune: ' + e.message);
+  }
+}
+
+function genereazaRaport() {
+  const { s, max } = getScores();
+  const total = Object.values(s).reduce((a,b)=>a+b,0);
+  const name = document.getElementById('f-nume').value || '';
+  document.getElementById('form-view').style.display = 'none';
+  document.getElementById('raport').style.display = 'block';
+  document.getElementById('r-name').textContent = name;
+  window.scrollTo(0, 0);
+  document.getElementById('pbar').style.width = '100%';
+  document.getElementById('r-scor-num').textContent = total;
+
+  let nivel = '', desc = '';
+  if (total <= 5) { nivel = 'Corp echilibrat'; desc = 'Scor de inflamație scăzut. Corpul dumneavoastră funcționează în limite normale.'; }
+  else if (total <= 12) { nivel = 'Inflamație moderată'; desc = 'Există câteva zone care necesită atenție. Modificările alimentare pot produce îmbunătățiri vizibile în 4–8 săptămâni.'; }
+  else if (total <= 22) { nivel = 'Inflamație ridicată'; desc = 'Profilul sugerează o încărcătură inflamatorie semnificativă. Se recomandă o abordare nutrițională funcțională susținută.'; }
+  else { nivel = 'Inflamație foarte ridicată'; desc = 'Scor ridicat care indică multiple sisteme implicate. Consultarea unui specialist este prioritară.'; }
+  document.getElementById('r-nivel-titlu').textContent = nivel;
+  document.getElementById('r-nivel-desc').textContent = desc;
+
+  const catDefs = [
+    { key: 'inf', label: 'Inflamație sistemică', tips: ['Corp neinflamat', 'Ajustări recomandate', 'Intervenție necesară'] },
+    { key: 'dig', label: 'Digestie & microbiom', tips: ['Digestie bună', 'Câteva dezechilibre', 'Microbiom perturbat'] },
+    { key: 'micro', label: 'Candidoză & infecții', tips: ['Fără semne', 'Posibil dezechilibru', 'Prezență probabilă'] },
+    { key: 'horm', label: 'Hormoni', tips: ['Echilibru bun', 'Posibil dezechilibru', 'Dezechilibru semnificativ'] },
+    { key: 'med', label: 'Boli cronice', tips: ['Fără boli cronice', 'Câteva afecțiuni', 'Multiple afecțiuni'] },
+  ];
+  let catHtml = '';
+  catDefs.forEach(({ key, label, tips }) => {
+    const val = s[key], m = max[key];
+    const pct = Math.round(val / m * 100);
+    const fillClass = pct < 35 ? 'fill-low' : pct < 65 ? 'fill-mid' : 'fill-high';
+    const tipIdx = pct < 35 ? 0 : pct < 65 ? 1 : 2;
+    catHtml += `<div class="cat-card"><div class="cat-label">${label}</div><div class="cat-bar-bg"><div class="cat-fill ${fillClass}" style="width:${pct}%"></div></div><div class="cat-val">${val} / ${m}</div><div class="cat-tip">${tips[tipIdx]}</div></div>`;
+  });
+  document.getElementById('r-cat-grid').innerHTML = catHtml;
+
+  const zone = [];
+  if (s.dig >= 2) zone.push({ icon: '🫁', cls: s.dig >= 4 ? 'r' : 'a', titlu: 'Permeabilitate intestinală', desc: 'Semnele de balonare și digestie lentă sugerează un intestin permeabil — factor direct în afecțiunile inflamatorii ale pielii.' });
+  if (ans['pofta-dulce']?.v === 'da' || ans['energie']?.v === 'da') zone.push({ icon: '🍬', cls: 'a', titlu: 'Disbioza și supracreștere de Candida', desc: 'Pofta de dulce și fluctuațiile de energie sunt semne clasice ale disbioze intestinale, cu impact direct pe acnee și rozacee.' });
+  if (s.horm >= 2) zone.push({ icon: '⚖️', cls: s.horm >= 4 ? 'r' : 'a', titlu: 'Dezechilibru hormonal', desc: 'Androgenele, insulina și cortizolul influențează direct secrețiile sebacee.' });
+  if (s.micro >= 2) zone.push({ icon: '🦠', cls: 'a', titlu: 'Disbioza microbiomului', desc: 'Infecțiile recurente indică un microbiom perturbat. Refacerea florei intestinale este esențială.' });
+  if (ans['oboseala']?.v === 'da' || ans['ceata']?.v === 'da') zone.push({ icon: '🧠', cls: 'a', titlu: 'Stres oxidativ', desc: 'Oboseala cronică sugerează stres oxidativ ridicat și posibil deficit de micronutrienți.' });
+  if (s.inf >= 5) zone.push({ icon: '🔥', cls: 'r', titlu: 'Inflamație sistemică cronică', desc: 'Multiple simptome inflamatorii concomitente alimentează afecțiunile cutanate.' });
+  if (zone.length === 0) zone.push({ icon: '✓', cls: 'g', titlu: 'Profil echilibrat', desc: 'Nu au fost identificate zone majore de risc.' });
+  document.getElementById('r-zone-list').innerHTML = zone.map(z => `<div class="zone-item ${z.cls}"><div class="zone-icon">${z.icon}</div><div><div class="zone-titlu">${z.titlu}</div><div class="zone-desc">${z.desc}</div></div></div>`).join('');
+
+  const rec = [];
+  if (s.dig >= 2 || ans['balon-carbo']?.v === 'da') rec.push('Elimină temporar glutenul și lactatele (4–6 săptămâni) pentru a evalua impactul lor.');
+  if (ans['pofta-dulce']?.v === 'da') rec.push('Reduceți zahărul rafinat. Înlocuiți cu legume, proteine de calitate și grăsimi sănătoase.');
+  if (s.micro >= 2) rec.push('Introduceți probiotice și alimente fermentate pentru refacerea microbiomului.');
+  if (s.horm >= 2) rec.push('Susțineți echilibrul hormonal prin somn suficient (7–8h) și creșterea consumului de zinc.');
+  rec.push('Hidratare optimă: minim 2L de apă/zi, preferabil filtrată sau în sticlă de sticlă.');
+  if (getRadioVal('sport') === 'Deloc' || getRadioVal('sport') === 'Ocazional') rec.push('Introduceți mișcare regulată — 30 min, 3× pe săptămână.');
+  rec.push('Jurnal alimentar 2 săptămâni: notați ce mâncați și starea pielii a doua zi.');
+  document.getElementById('r-rec-list').innerHTML = rec.map((r, i) => `<div class="rec-item"><div class="rec-num">${i+1}</div><div class="rec-text">${r}</div></div>`).join('');
+}
+</script>
+</body>
+</html>
